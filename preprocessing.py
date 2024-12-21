@@ -103,3 +103,10 @@ plt.title("Processing Time per File")
 plt.xlabel("File Index")
 plt.ylabel("Processing Time (seconds)")
 plt.show()
+
+np.save("X_train.npy", X_train)
+np.save("y_train.npy", y_train)
+np.save("X_val.npy", X_val)
+np.save("y_val.npy", y_val)
+
+print("Preprocessed data saved successfully!")
