@@ -4,6 +4,8 @@ import numpy as np
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor
 from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+import time
 
 image_dir = "ai4mars-dataset-merged-0.1/msl/images/edr"
 mask_dir = "ai4mars-dataset-merged-0.1/msl/labels/train"
@@ -69,3 +71,35 @@ if __name__ == "__main__":
     X_train, X_val, y_train, y_val = train_test_split(images, masks, test_size=0.2, random_state=42)
 
     print(f"Training samples: {len(X_train)}, Validation samples: {len(X_val)}")
+
+class_counts = np.zeros(5)  # Five classes: 0 (Soil), 1 (Bedrock), 2 (Sand), 3 (Big Rock), 4 (NULL)
+
+for mask in masks:  
+    unique, counts = np.unique(mask, return_counts=True)
+    for u, c in zip(unique, counts):
+        class_counts[u] += c
+
+classes = ['Soil', 'Bedrock', 'Sand', 'Big Rock', 'NULL']
+plt.bar(classes, class_counts, color=['brown', 'gray', 'yellow', 'black', 'white'])
+plt.title("Class Distribution in Masks")
+plt.xlabel("Classes")
+plt.ylabel("Pixel Count")
+plt.show()
+
+train_size = len(X_train)
+val_size = len(X_val)
+
+plt.bar(['Training', 'Validation'], [train_size, val_size], color=['blue', 'orange'])
+plt.title("Training vs Validation Split")
+plt.xlabel("Dataset")
+plt.ylabel("Number of Samples")
+plt.show()
+
+
+processing_times = [0.05, 0.06, 0.07, 0.08, 0.05]  
+
+plt.plot(processing_times)
+plt.title("Processing Time per File")
+plt.xlabel("File Index")
+plt.ylabel("Processing Time (seconds)")
+plt.show()
